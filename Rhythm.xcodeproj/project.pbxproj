@@ -1,0 +1,519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A2010000000000000000001 /* RhythmApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000001 /* RhythmApp.swift */; };
+		0A2010000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000002 /* ContentView.swift */; };
+		0A2010000000000000000003 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000003 /* DesignSystem.swift */; };
+		0A2010000000000000000004 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000004 /* Models.swift */; };
+		0A2010000000000000000005 /* MorningLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000005 /* MorningLightView.swift */; };
+		0A2010000000000000000006 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000006 /* DashboardView.swift */; };
+		0A2010000000000000000007 /* BreathingResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000007 /* BreathingResetView.swift */; };
+		0A2010000000000000000008 /* AppGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000008 /* AppGateView.swift */; };
+		0A2010000000000000000009 /* NotificationBatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000009 /* NotificationBatchView.swift */; };
+		0A2010000000000000000010 /* EveningDownshiftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000010 /* EveningDownshiftView.swift */; };
+		0A2010000000000000000011 /* WeeklyReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000011 /* WeeklyReportView.swift */; };
+		0A2010000000000000000012 /* RhythmEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000013 /* RhythmEngine.swift */; };
+		0A2010000000000000000013 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000014 /* HealthKitService.swift */; };
+		0A2010000000000000000014 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000015 /* NotificationScheduler.swift */; };
+		0A2010000000000000000015 /* AppShieldService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000016 /* AppShieldService.swift */; };
+		0A2010000000000000000016 /* RhythmStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000017 /* RhythmStore.swift */; };
+		0A2020000000000000000001 /* RhythmEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1020000000000000000001 /* RhythmEngineTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0AB010000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A8010000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A5010000000000000000001;
+			remoteInfo = Rhythm;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0A1010000000000000000001 /* RhythmApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmApp.swift; sourceTree = "<group>"; };
+		0A1010000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000003 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		0A1010000000000000000004 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		0A1010000000000000000005 /* MorningLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningLightView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000006 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000007 /* BreathingResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingResetView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000008 /* AppGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGateView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000009 /* NotificationBatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBatchView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000010 /* EveningDownshiftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveningDownshiftView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000011 /* WeeklyReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyReportView.swift; sourceTree = "<group>"; };
+		0A1010000000000000000012 /* Rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A1010000000000000000013 /* RhythmEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmEngine.swift; sourceTree = "<group>"; };
+		0A1010000000000000000014 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		0A1010000000000000000015 /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+		0A1010000000000000000016 /* AppShieldService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShieldService.swift; sourceTree = "<group>"; };
+		0A1010000000000000000017 /* RhythmStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmStore.swift; sourceTree = "<group>"; };
+		0A1010000000000000000018 /* Rhythm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rhythm.entitlements; sourceTree = "<group>"; };
+		0A1020000000000000000001 /* RhythmEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmEngineTests.swift; sourceTree = "<group>"; };
+		0A1020000000000000000002 /* RhythmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhythmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0A3010000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A3020000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A4010000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				0A4010000000000000000002 /* Rhythm */,
+				0A4020000000000000000001 /* RhythmTests */,
+				0A4010000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000002 /* Rhythm */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000001 /* RhythmApp.swift */,
+				0A1010000000000000000002 /* ContentView.swift */,
+				0A1010000000000000000003 /* DesignSystem.swift */,
+				0A1010000000000000000004 /* Models.swift */,
+				0A4010000000000000000005 /* Engine */,
+				0A4010000000000000000006 /* Services */,
+				0A4010000000000000000007 /* Store */,
+				0A4010000000000000000008 /* Resources */,
+				0A4010000000000000000004 /* Screens */,
+			);
+			path = Rhythm;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000012 /* Rhythm.app */,
+				0A1020000000000000000002 /* RhythmTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000004 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000005 /* MorningLightView.swift */,
+				0A1010000000000000000006 /* DashboardView.swift */,
+				0A1010000000000000000007 /* BreathingResetView.swift */,
+				0A1010000000000000000008 /* AppGateView.swift */,
+				0A1010000000000000000009 /* NotificationBatchView.swift */,
+				0A1010000000000000000010 /* EveningDownshiftView.swift */,
+				0A1010000000000000000011 /* WeeklyReportView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000005 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000013 /* RhythmEngine.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000014 /* HealthKitService.swift */,
+				0A1010000000000000000015 /* NotificationScheduler.swift */,
+				0A1010000000000000000016 /* AppShieldService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000007 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000017 /* RhythmStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		0A4010000000000000000008 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000018 /* Rhythm.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0A4020000000000000000001 /* RhythmTests */ = {
+			isa = PBXGroup;
+			children = (
+				0A1020000000000000000001 /* RhythmEngineTests.swift */,
+			);
+			path = RhythmTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0A5010000000000000000001 /* Rhythm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A9010000000000000000002 /* Build configuration list for PBXNativeTarget "Rhythm" */;
+			buildPhases = (
+				0A6010000000000000000001 /* Sources */,
+				0A3010000000000000000001 /* Frameworks */,
+				0A7010000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Rhythm;
+			productName = Rhythm;
+			productReference = 0A1010000000000000000012 /* Rhythm.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0A5020000000000000000001 /* RhythmTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A9020000000000000000001 /* Build configuration list for PBXNativeTarget "RhythmTests" */;
+			buildPhases = (
+				0A6020000000000000000001 /* Sources */,
+				0A3020000000000000000001 /* Frameworks */,
+				0A7020000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0AB020000000000000000001 /* PBXTargetDependency */,
+			);
+			name = RhythmTests;
+			productName = RhythmTests;
+			productReference = 0A1020000000000000000002 /* RhythmTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0A8010000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					0A5010000000000000000001 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					0A5020000000000000000001 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 0A5010000000000000000001;
+					};
+				};
+			};
+			buildConfigurationList = 0A9010000000000000000001 /* Build configuration list for PBXProject "Rhythm" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0A4010000000000000000001;
+			productRefGroup = 0A4010000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0A5010000000000000000001 /* Rhythm */,
+				0A5020000000000000000001 /* RhythmTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0A7010000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A7020000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0A6010000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A2010000000000000000001 /* RhythmApp.swift in Sources */,
+				0A2010000000000000000002 /* ContentView.swift in Sources */,
+				0A2010000000000000000003 /* DesignSystem.swift in Sources */,
+				0A2010000000000000000004 /* Models.swift in Sources */,
+				0A2010000000000000000005 /* MorningLightView.swift in Sources */,
+				0A2010000000000000000006 /* DashboardView.swift in Sources */,
+				0A2010000000000000000007 /* BreathingResetView.swift in Sources */,
+				0A2010000000000000000008 /* AppGateView.swift in Sources */,
+				0A2010000000000000000009 /* NotificationBatchView.swift in Sources */,
+				0A2010000000000000000010 /* EveningDownshiftView.swift in Sources */,
+				0A2010000000000000000011 /* WeeklyReportView.swift in Sources */,
+				0A2010000000000000000012 /* RhythmEngine.swift in Sources */,
+				0A2010000000000000000013 /* HealthKitService.swift in Sources */,
+				0A2010000000000000000014 /* NotificationScheduler.swift in Sources */,
+				0A2010000000000000000015 /* AppShieldService.swift in Sources */,
+				0A2010000000000000000016 /* RhythmStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A6020000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A2020000000000000000001 /* RhythmEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0AB020000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0A5010000000000000000001 /* Rhythm */;
+			targetProxy = 0AB010000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0AA010000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		0AA010000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0AA010000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = Rhythm/Resources/Rhythm.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm OS";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Rhythm OS reads Health data such as HRV, sleep, daylight, movement, and mindful minutes to calculate your rhythm state.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Rhythm OS writes mindful reset sessions and optional outdoor walks when you complete interventions.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisdimarco.rhythm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		0AA010000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = Rhythm/Resources/Rhythm.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm OS";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Rhythm OS reads Health data such as HRV, sleep, daylight, movement, and mindful minutes to calculate your rhythm state.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Rhythm OS writes mindful reset sessions and optional outdoor walks when you complete interventions.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisdimarco.rhythm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0AA020000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisdimarco.rhythm.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rhythm.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Rhythm";
+			};
+			name = Debug;
+		};
+		0AA020000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisdimarco.rhythm.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rhythm.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Rhythm";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A9010000000000000000001 /* Build configuration list for PBXProject "Rhythm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AA010000000000000000001 /* Debug */,
+				0AA010000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A9010000000000000000002 /* Build configuration list for PBXNativeTarget "Rhythm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AA010000000000000000003 /* Debug */,
+				0AA010000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A9020000000000000000001 /* Build configuration list for PBXNativeTarget "RhythmTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AA020000000000000000001 /* Debug */,
+				0AA020000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0A8010000000000000000001 /* Project object */;
+}
