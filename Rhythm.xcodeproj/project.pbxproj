@@ -23,7 +23,10 @@
 		0A2010000000000000000014 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000015 /* NotificationScheduler.swift */; };
 		0A2010000000000000000015 /* AppShieldService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000016 /* AppShieldService.swift */; };
 		0A2010000000000000000016 /* RhythmStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000017 /* RhythmStore.swift */; };
+		0A2010000000000000000017 /* RhythmVisualState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1010000000000000000019 /* RhythmVisualState.swift */; };
+		0A2010000000000000000018 /* BiofieldMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A101000000000000000001A /* BiofieldMetalView.swift */; };
 		0A2020000000000000000001 /* RhythmEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1020000000000000000001 /* RhythmEngineTests.swift */; };
+		0A2020000000000000000002 /* RhythmVisualStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1020000000000000000003 /* RhythmVisualStateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +58,11 @@
 		0A1010000000000000000016 /* AppShieldService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShieldService.swift; sourceTree = "<group>"; };
 		0A1010000000000000000017 /* RhythmStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmStore.swift; sourceTree = "<group>"; };
 		0A1010000000000000000018 /* Rhythm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rhythm.entitlements; sourceTree = "<group>"; };
+		0A1010000000000000000019 /* RhythmVisualState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmVisualState.swift; sourceTree = "<group>"; };
+		0A101000000000000000001A /* BiofieldMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiofieldMetalView.swift; sourceTree = "<group>"; };
 		0A1020000000000000000001 /* RhythmEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmEngineTests.swift; sourceTree = "<group>"; };
 		0A1020000000000000000002 /* RhythmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhythmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A1020000000000000000003 /* RhythmVisualStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmVisualStateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +102,7 @@
 				0A4010000000000000000005 /* Engine */,
 				0A4010000000000000000006 /* Services */,
 				0A4010000000000000000007 /* Store */,
+				0A4010000000000000000009 /* Rendering */,
 				0A4010000000000000000008 /* Resources */,
 				0A4010000000000000000004 /* Screens */,
 			);
@@ -159,10 +166,20 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		0A4010000000000000000009 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				0A1010000000000000000019 /* RhythmVisualState.swift */,
+				0A101000000000000000001A /* BiofieldMetalView.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
 		0A4020000000000000000001 /* RhythmTests */ = {
 			isa = PBXGroup;
 			children = (
 				0A1020000000000000000001 /* RhythmEngineTests.swift */,
+				0A1020000000000000000003 /* RhythmVisualStateTests.swift */,
 			);
 			path = RhythmTests;
 			sourceTree = "<group>";
@@ -269,6 +286,8 @@
 				0A2010000000000000000002 /* ContentView.swift in Sources */,
 				0A2010000000000000000003 /* DesignSystem.swift in Sources */,
 				0A2010000000000000000004 /* Models.swift in Sources */,
+				0A2010000000000000000017 /* RhythmVisualState.swift in Sources */,
+				0A2010000000000000000018 /* BiofieldMetalView.swift in Sources */,
 				0A2010000000000000000005 /* MorningLightView.swift in Sources */,
 				0A2010000000000000000006 /* DashboardView.swift in Sources */,
 				0A2010000000000000000007 /* BreathingResetView.swift in Sources */,
@@ -289,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A2020000000000000000001 /* RhythmEngineTests.swift in Sources */,
+				0A2020000000000000000002 /* RhythmVisualStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

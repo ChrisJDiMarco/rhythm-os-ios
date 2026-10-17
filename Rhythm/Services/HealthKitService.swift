@@ -77,20 +77,25 @@ final class HealthKitService {
         return samples
     }
 
-    func startObservers(onChange: @escaping @Sendable () -> Void) {
+    func startObservers(
+        onChange: @escaping @Sendable (String) -> Void,
+        onDeliveryRegistration: @escaping @Sendable (String, Bool, String?) -> Void
+    ) {
         guard isAvailable, observerQueries.isEmpty else { return }
 
         let sampleTypes = readTypes().compactMap { $0 as? HKSampleType }
         for sampleType in sampleTypes {
             let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { _, completionHandler, error in
                 if error == nil {
-                    onChange()
+                    onChange(sampleType.identifier)
                 }
                 completionHandler()
             }
 
             store.execute(query)
-            store.enableBackgroundDelivery(for: sampleType, frequency: .hourly) { _, _ in }
+            store.enableBackgroundDelivery(for: sampleType, frequency: backgroundFrequency(for: sampleType)) { success, error in
+                onDeliveryRegistration(sampleType.identifier, success, error?.localizedDescription)
+            }
             observerQueries.append(query)
         }
     }
@@ -216,6 +221,18 @@ final class HealthKitService {
 
         types.insert(HKObjectType.workoutType())
         return types
+    }
+
+    private func backgroundFrequency(for sampleType: HKSampleType) -> HKUpdateFrequency {
+        switch sampleType.identifier {
+        case HKQuantityTypeIdentifier.stepCount.rawValue,
+             HKQuantityTypeIdentifier.distanceWalkingRunning.rawValue,
+             HKQuantityTypeIdentifier.appleExerciseTime.rawValue,
+             HKQuantityTypeIdentifier.timeInDaylight.rawValue:
+            return .hourly
+        default:
+            return .immediate
+        }
     }
 
     private func sumQuantity(

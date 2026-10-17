@@ -6,7 +6,13 @@ struct RhythmApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                RhythmColor.bgDeep
+                    .ignoresSafeArea()
+
+                ContentView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
                 .environmentObject(store)
                 .preferredColorScheme(.dark)
         }

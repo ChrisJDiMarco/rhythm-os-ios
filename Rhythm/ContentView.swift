@@ -2,23 +2,33 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var store: RhythmStore
+    @Environment(\.scenePhase) private var scenePhase
     @State private var selection = RhythmScreen.dashboard.rawValue
 
     var body: some View {
         ZStack {
             selectedScreen
                 .id(selection)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.opacity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(RhythmColor.bgDeep)
         .animation(.easeInOut(duration: 0.18), value: selection)
         .ignoresSafeArea(.keyboard)
         .task {
             await store.bootstrap()
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task { await store.appDidBecomeActive() }
+        }
         .safeAreaInset(edge: .bottom) {
-            RhythmTabBar(selection: $selection)
-                .padding(.horizontal, 14)
-                .padding(.bottom, 4)
+            if selection != RhythmScreen.dashboard.rawValue {
+                RhythmTabBar(selection: $selection)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 4)
+            }
         }
     }
 
@@ -28,7 +38,9 @@ struct ContentView: View {
         case .morning:
             MorningLightView()
         case .dashboard:
-            DashboardView()
+            DashboardView { screen in
+                selection = screen.rawValue
+            }
         case .breathe:
             BreathingResetView()
         case .gate:

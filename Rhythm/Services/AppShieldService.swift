@@ -45,7 +45,7 @@ final class AppShieldService: ObservableObject {
     }
 
     func applyShield() {
-        guard case .authorized = status else {
+        guard status == .authorized else {
             isShieldingActive = false
             return
         }
@@ -72,7 +72,7 @@ final class AppShieldService: ObservableObject {
             .notRequested
         case .denied:
             .denied
-        case .approved:
+        case .approved, .approvedWithDataAccess:
             .authorized
         @unknown default:
             .failed("Unknown Screen Time authorization state")

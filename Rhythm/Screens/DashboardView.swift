@@ -1,245 +1,397 @@
 import SwiftUI
+import simd
 
 struct DashboardView: View {
     @EnvironmentObject private var store: RhythmStore
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
-    ]
+    let openScreen: (RhythmScreen) -> Void
+
+    @State private var touchOrigin: CGPoint?
+    @State private var touchPoint: CGPoint?
+    @State private var selectedCommand: BioCommand?
+    @State private var lastHapticCommand: BioCommand?
+    @State private var touchCleanupTask: Task<Void, Never>?
+
+    private let commands = BioCommand.all
 
     var body: some View {
-        let snapshot = store.snapshot
+        let visualState = RhythmVisualState(
+            snapshot: store.snapshot,
+            confidence: store.rhythmConfidence,
+            isRefreshing: store.isRefreshing
+        )
 
-        ScreenChrome(screen: .dashboard, variant: .dashboard, spacing: 18) {
-            HStack {
-                Text(snapshot.today.date.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day()))
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .tracking(1.1)
-                    .textCase(.uppercase)
-                    .foregroundStyle(RhythmColor.ink3)
+        GeometryReader { proxy in
+            ZStack {
+                BiofieldMetalView(
+                    visualState: visualState,
+                    touchOrigin: touchOrigin,
+                    touchPoint: touchPoint,
+                    commandTint: selectedCommand?.fieldTint
+                )
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .background(Color(hex: 0x03060D))
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
 
-                Spacer()
-
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [RhythmColor.bio, RhythmColor.evening],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+                if let touchOrigin {
+                    BioCommandHalo(
+                        commands: commands,
+                        origin: touchOrigin,
+                        touchPoint: touchPoint ?? touchOrigin,
+                        selectedCommand: selectedCommand
                     )
-                    .frame(width: 34, height: 34)
-                    .overlay(
-                        Image(systemName: snapshot.isMockData ? "waveform.path.ecg" : "heart.fill")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(Color(hex: 0x071014).opacity(0.72))
-                    )
-            }
-
-            HealthConnectionCard()
-
-            CircadianRing(snapshot: snapshot)
-                .frame(height: 268)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 2)
-
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(metrics(from: snapshot)) { metric in
-                    MetricTile(metric: metric)
+                    .transition(.scale(scale: 0.92).combined(with: .opacity))
                 }
             }
+            .background(Color(hex: 0x03060D))
+            .contentShape(Rectangle())
+            .gesture(commandGesture(in: proxy.size))
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Rhythm biofield")
+            .accessibilityHint("Press and drag to choose a rhythm command.")
+            .onDisappear {
+                clearTouchState(animated: false)
+            }
+        }
+        .ignoresSafeArea()
+    }
+
+    private func commandGesture(in size: CGSize) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                if touchOrigin == nil {
+                    touchOrigin = clamped(value.startLocation, in: size)
+                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                }
+
+                let point = clamped(value.location, in: size)
+                touchPoint = point
+                selectedCommand = nearestCommand(from: touchOrigin ?? value.startLocation, to: point)
+                scheduleTouchCleanup()
+
+                if let selectedCommand, selectedCommand != lastHapticCommand {
+                    UISelectionFeedbackGenerator().selectionChanged()
+                    lastHapticCommand = selectedCommand
+                }
+            }
+            .onEnded { _ in
+                if let selectedCommand {
+                    activate(selectedCommand)
+                }
+
+                clearTouchState(animated: true)
+            }
+    }
+
+    private func nearestCommand(from origin: CGPoint, to point: CGPoint) -> BioCommand? {
+        let dx = point.x - origin.x
+        let dy = point.y - origin.y
+        let distance = sqrt(dx * dx + dy * dy)
+        guard distance > 44 else { return nil }
+
+        let angle = atan2(dy, dx)
+        return commands.min { first, second in
+            angularDistance(angle, first.angle) < angularDistance(angle, second.angle)
         }
     }
 
-    private func metrics(from snapshot: RhythmSnapshot) -> [VitalMetric] {
-        [
-            VitalMetric(
-                label: "HRV",
-                value: snapshot.today.hrvMS.map { "\(Int($0.rounded()))" } ?? "--",
-                unit: "ms",
-                delta: "\(snapshot.scores.hrv)/100 readiness",
-                trend: snapshot.scores.hrv >= 55 ? .good : .warning
-            ),
-            VitalMetric(
-                label: "Sun today",
-                value: "\(Int(snapshot.today.daylightMinutes.rounded()))",
-                unit: "min",
-                delta: snapshot.scores.daylight >= 80 ? "goal hit" : "needs light",
-                trend: snapshot.scores.daylight >= 70 ? .good : .warning
-            ),
-            VitalMetric(
-                label: "Movement",
-                value: "\(Int(snapshot.today.exerciseMinutes.rounded()))",
-                unit: "min",
-                delta: "\(Int(snapshot.today.steps.rounded())) steps",
-                trend: snapshot.scores.movement >= 65 ? .good : .warning
-            ),
-            VitalMetric(
-                label: "Pickups",
-                value: "\(snapshot.today.pickups)",
-                unit: "",
-                delta: "\(Int(snapshot.today.appBudgetUsedMinutes.rounded())) min used",
-                trend: snapshot.scores.appFriction >= 70 ? .good : .warning
-            )
-        ]
+    private func angularDistance(_ lhs: Double, _ rhs: Double) -> Double {
+        let difference = abs(lhs - rhs)
+        return min(difference, Double.pi * 2 - difference)
+    }
+
+    private func activate(_ command: BioCommand) {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        switch command.kind {
+        case .focus:
+            Task { await store.refresh() }
+            openScreen(.dashboard)
+        case .light:
+            if store.activeOutdoorStart == nil {
+                store.startOutdoorSession()
+            }
+            openScreen(.morning)
+        case .reset:
+            if store.activeBreathingStart == nil {
+                store.startBreathingReset()
+            }
+            openScreen(.breathe)
+        case .apps:
+            openScreen(.gate)
+        case .alerts:
+            openScreen(.notifications)
+        case .night:
+            openScreen(.evening)
+        case .week:
+            openScreen(.weekly)
+        }
+    }
+
+    private func scheduleTouchCleanup() {
+        touchCleanupTask?.cancel()
+        touchCleanupTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 7_000_000_000)
+            guard !Task.isCancelled, touchOrigin != nil else { return }
+            clearTouchState(animated: true)
+        }
+    }
+
+    private func clearTouchState(animated: Bool) {
+        touchCleanupTask?.cancel()
+        touchCleanupTask = nil
+
+        let reset = {
+            touchOrigin = nil
+            touchPoint = nil
+            selectedCommand = nil
+            lastHapticCommand = nil
+        }
+
+        if animated {
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.82)) {
+                reset()
+            }
+        } else {
+            reset()
+        }
+    }
+
+    private func clamped(_ point: CGPoint, in size: CGSize) -> CGPoint {
+        CGPoint(
+            x: min(max(point.x, 132), size.width - 132),
+            y: min(max(point.y, 184), size.height - 238)
+        )
     }
 }
 
-private struct CircadianRing: View {
-    let snapshot: RhythmSnapshot
-    @State private var rotation: Double = 0
+private struct BioCommandHalo: View {
+    let commands: [BioCommand]
+    let origin: CGPoint
+    let touchPoint: CGPoint
+    let selectedCommand: BioCommand?
+
+    var body: some View {
+        ZStack {
+            BioCommandLens(origin: origin, tint: selectedCommand?.tint ?? RhythmColor.bio)
+
+            FingerWake(
+                origin: origin,
+                touchPoint: touchPoint,
+                tint: selectedCommand?.tint ?? RhythmColor.bio
+            )
+
+            ForEach(commands) { command in
+                BioCommandNode(
+                    command: command,
+                    isSelected: selectedCommand == command
+                )
+                .position(position(for: command))
+            }
+        }
+        .animation(.spring(response: 0.24, dampingFraction: 0.78), value: selectedCommand)
+    }
+
+    private func position(for command: BioCommand) -> CGPoint {
+        let radius: CGFloat = selectedCommand == command ? 110 : 98
+        return CGPoint(
+            x: origin.x + cos(command.angle) * radius,
+            y: origin.y + sin(command.angle) * radius
+        )
+    }
+}
+
+private struct BioCommandLens: View {
+    let origin: CGPoint
+    let tint: Color
 
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.white.opacity(0.05), style: StrokeStyle(lineWidth: 26, lineCap: .round))
-                .frame(width: 236, height: 236)
-
-            Circle()
-                .trim(from: 0.0, to: 0.995)
-                .stroke(
-                    AngularGradient(
+                .fill(
+                    RadialGradient(
                         colors: [
-                            Color(hex: 0x0B1530),
-                            Color(hex: 0x1A2B66),
-                            RhythmColor.morning,
-                            Color(hex: 0xFFF2C5),
-                            RhythmColor.bio,
-                            Color(hex: 0x5FBCFF),
-                            RhythmColor.evening,
-                            Color(hex: 0x4A2E80),
-                            Color(hex: 0x0B1530)
+                            .white.opacity(0.98),
+                            .white.opacity(0.98),
+                            .white.opacity(0.88),
+                            .white.opacity(0.42),
+                            .white.opacity(0.0)
                         ],
-                        center: .center
-                    ),
-                    style: StrokeStyle(lineWidth: 26, lineCap: .round)
+                        center: .center,
+                        startRadius: 4,
+                        endRadius: 194
+                    )
                 )
-                .frame(width: 236, height: 236)
-                .rotationEffect(.degrees(rotation))
-                .shadow(color: RhythmColor.bio.opacity(0.18), radius: 22)
+                .frame(width: 388, height: 388)
+                .blur(radius: 3.5)
 
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [RhythmColor.bgElevated, Color(hex: 0x05070F)],
-                        center: .top,
+                        colors: [
+                            tint.opacity(0.24),
+                            tint.opacity(0.10),
+                            .clear
+                        ],
+                        center: .center,
                         startRadius: 16,
-                        endRadius: 120
+                        endRadius: 156
                     )
                 )
-                .frame(width: 172, height: 172)
-                .overlay(Circle().stroke(.white.opacity(0.07), lineWidth: 1))
-
-            VStack(spacing: 5) {
-                Text("Now - \(snapshot.phase == .reset ? "Activated" : "Regulated")")
-                    .font(.system(size: 10, weight: .semibold, design: .rounded))
-                    .tracking(1.6)
-                    .textCase(.uppercase)
-                    .foregroundStyle(RhythmColor.bio)
-
-                Text(snapshot.phase.rawValue)
-                    .font(.system(size: 27, weight: .medium, design: .rounded))
-                    .foregroundStyle(RhythmColor.ink)
-                    .minimumScaleFactor(0.86)
-
-                Text(snapshot.nextBreakMinutes == 0 ? snapshot.phase.detail : "\(snapshot.phase.detail) Next break in \(snapshot.nextBreakMinutes) min.")
-                    .font(.system(size: 11, weight: .regular, design: .rounded))
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(2)
-                    .foregroundStyle(RhythmColor.ink3)
-                    .frame(width: 126)
-            }
-
-            RingMarker(angle: 168)
-                .frame(width: 236, height: 236)
-        }
-        .onAppear {
-            withAnimation(.linear(duration: 60).repeatForever(autoreverses: false)) {
-                rotation = 360
-            }
-        }
-    }
-}
-
-private struct HealthConnectionCard: View {
-    @EnvironmentObject private var store: RhythmStore
-
-    var body: some View {
-        SolidCard(radius: 18) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
-                    Image(systemName: store.snapshot.isMockData ? "heart.text.square" : "heart.fill")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(store.healthStatus.isUsable ? RhythmColor.bio : RhythmColor.warn)
-
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(store.healthStatus.label)
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
-                            .foregroundStyle(RhythmColor.ink)
-
-                        Text(store.snapshot.isMockData ? "Simulator/mock mode is active. Connect Health on device for live biometrics." : "Live Apple Health data is driving the rhythm engine.")
-                            .font(.system(size: 11, weight: .regular, design: .rounded))
-                            .lineSpacing(2)
-                            .foregroundStyle(RhythmColor.ink3)
-                    }
-
-                    Spacer()
-                }
-
-                HStack(spacing: 10) {
-                    Button {
-                        Task { await store.requestHealthAuthorization() }
-                    } label: {
-                        Label("Health", systemImage: "heart.circle.fill")
-                            .font(.system(size: 12, weight: .semibold, design: .rounded))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 11)
-                            .background(RhythmColor.bio.opacity(0.14), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-                            .foregroundStyle(RhythmColor.bio)
-                    }
-                    .buttonStyle(.plain)
-
-                    Button {
-                        Task { await store.refresh() }
-                    } label: {
-                        Label(store.isRefreshing ? "Syncing" : "Sync", systemImage: "arrow.clockwise")
-                            .font(.system(size: 12, weight: .semibold, design: .rounded))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 11)
-                            .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-                            .foregroundStyle(RhythmColor.ink2)
-                    }
-                    .buttonStyle(.plain)
-
-                    Toggle(isOn: $store.useMockData) {
-                        Text("Mock")
-                            .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    }
-                    .labelsHidden()
-                    .tint(RhythmColor.bio)
-                }
-            }
-        }
-    }
-}
-
-private struct RingMarker: View {
-    let angle: Double
-
-    var body: some View {
-        GeometryReader { proxy in
-            let radius = min(proxy.size.width, proxy.size.height) / 2
-            let radians = (angle - 90) * Double.pi / 180
-            let x = proxy.size.width / 2 + CGFloat(cos(radians)) * radius
-            let y = proxy.size.height / 2 + CGFloat(sin(radians)) * radius
+                .frame(width: 312, height: 312)
+                .blendMode(.multiply)
 
             Circle()
-                .fill(.white)
-                .frame(width: 15, height: 15)
-                .shadow(color: RhythmColor.bio.opacity(0.85), radius: 10)
-                .overlay(Circle().stroke(RhythmColor.bgDeep, lineWidth: 4))
-                .position(x: x, y: y)
+                .stroke(Color(hex: 0x11151F).opacity(0.08), lineWidth: 1)
+                .frame(width: 232, height: 232)
+                .blur(radius: 0.4)
+        }
+        .position(origin)
+        .allowsHitTesting(false)
+    }
+}
+
+private struct FingerWake: View {
+    let origin: CGPoint
+    let touchPoint: CGPoint
+    let tint: Color
+
+    var body: some View {
+        ZStack {
+            Path { path in
+                path.move(to: origin)
+                path.addLine(to: touchPoint)
+            }
+            .stroke(Color(hex: 0x11151F).opacity(0.20), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+
+            Circle()
+                .fill(tint.opacity(0.86))
+                .frame(width: 20, height: 20)
+                .overlay(
+                    Circle()
+                        .stroke(.white.opacity(0.86), lineWidth: 1.2)
+                )
+                .shadow(color: tint.opacity(0.52), radius: 18)
+                .position(touchPoint)
+
+            Circle()
+                .stroke(Color(hex: 0x11151F).opacity(0.15), lineWidth: 1.2)
+                .frame(width: 54, height: 54)
+                .position(origin)
         }
     }
+}
+
+private struct BioCommandNode: View {
+    let command: BioCommand
+    let isSelected: Bool
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(isSelected ? command.tint.opacity(0.96) : Color.white.opacity(0.86))
+                .frame(width: isSelected ? 60 : 50, height: isSelected ? 60 : 50)
+                .shadow(
+                    color: isSelected ? command.tint.opacity(0.42) : Color(hex: 0x11151F).opacity(0.14),
+                    radius: isSelected ? 22 : 12,
+                    y: isSelected ? 8 : 5
+                )
+                .overlay(
+                    Circle()
+                        .stroke(isSelected ? .white.opacity(0.74) : Color(hex: 0x11151F).opacity(0.12), lineWidth: 1)
+                )
+
+            Image(systemName: command.symbol)
+                .font(.system(size: isSelected ? 22 : 18, weight: .semibold))
+                .foregroundStyle(Color(hex: 0x07101D))
+        }
+        .frame(width: 68, height: 68)
+        .scaleEffect(isSelected ? 1.08 : 1)
+        .accessibilityLabel(command.label)
+    }
+}
+
+private enum BioCommandKind {
+    case focus
+    case light
+    case reset
+    case apps
+    case alerts
+    case night
+    case week
+}
+
+private struct BioCommand: Identifiable, Equatable {
+    let kind: BioCommandKind
+    let label: String
+    let symbol: String
+    let angle: Double
+    let tint: Color
+    let fieldTint: SIMD3<Float>
+
+    var id: BioCommandKind { kind }
+
+    static func == (lhs: BioCommand, rhs: BioCommand) -> Bool {
+        lhs.kind == rhs.kind
+    }
+
+    static let all = [
+        BioCommand(
+            kind: .focus,
+            label: "Focus",
+            symbol: "scope",
+            angle: -.pi / 2,
+            tint: RhythmColor.bio,
+            fieldTint: SIMD3<Float>(0.00, 0.96, 0.83)
+        ),
+        BioCommand(
+            kind: .light,
+            label: "Light",
+            symbol: "sun.max.fill",
+            angle: -.pi / 4,
+            tint: RhythmColor.morning,
+            fieldTint: SIMD3<Float>(1.00, 0.64, 0.27)
+        ),
+        BioCommand(
+            kind: .apps,
+            label: "Apps",
+            symbol: "shield.fill",
+            angle: 0,
+            tint: RhythmColor.evening,
+            fieldTint: SIMD3<Float>(0.72, 0.57, 1.00)
+        ),
+        BioCommand(
+            kind: .alerts,
+            label: "Alerts",
+            symbol: "bell.badge.fill",
+            angle: .pi / 4,
+            tint: Color(hex: 0x5FBCFF),
+            fieldTint: SIMD3<Float>(0.37, 0.74, 1.00)
+        ),
+        BioCommand(
+            kind: .night,
+            label: "Night",
+            symbol: "moon.stars.fill",
+            angle: .pi / 2,
+            tint: RhythmColor.evening,
+            fieldTint: SIMD3<Float>(0.72, 0.57, 1.00)
+        ),
+        BioCommand(
+            kind: .week,
+            label: "Week",
+            symbol: "chart.bar.fill",
+            angle: .pi * 3 / 4,
+            tint: RhythmColor.warn,
+            fieldTint: SIMD3<Float>(1.00, 0.78, 0.28)
+        ),
+        BioCommand(
+            kind: .reset,
+            label: "Reset",
+            symbol: "wind",
+            angle: .pi,
+            tint: RhythmColor.bio,
+            fieldTint: SIMD3<Float>(0.00, 0.96, 0.83)
+        )
+    ]
 }
